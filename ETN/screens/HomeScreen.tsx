@@ -120,14 +120,9 @@ export default function HomeScreen() {
     <ScrollView>
         <View style={styles.container}>
             <View style={styles.hero}>
-                <Image style={styles.image} source = {require('../assets/books_1.jpg')} />
+                <Image style={styles.image} source = {require('../assets/hero-img.jpg')} />
             </View>
-            <View style={styles.searchbarContainer}> 
-                <TextInput placeholder='Search' style={styles.searchbar}>
-                    
-
-                </TextInput>
-            </View>
+            
             
             <Text style={styles.heading}>Empowering the Nation</Text>
             
@@ -154,8 +149,12 @@ export default function HomeScreen() {
                 showsHorizontalScrollIndicator={false}  // Hide the horizontal scroll indicator
                 contentContainerStyle={styles.flatListContainer}  // Optional: Style the FlatList container
             />
-            
-
+            <View style={styles.BackBtnContainer}>
+              <TouchableOpacity style={styles.BackBtn} onPress={() => navigation.navigate("ContactUs")}>
+                  <Text style={{color: '#fff'}}>Contact Us</Text>
+                  
+              </TouchableOpacity>
+            </View>
         
         </View>
 
@@ -168,12 +167,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 8,
+    backgroundColor: "#0d2e09",
     
   },
   heading: {
     fontFamily: 'Iowan Old Style',
     marginTop: 15,
     fontSize: 24,
+    color: '#fff',
     fontWeight: 'bold',
     marginBottom: 20,
   },
@@ -195,21 +196,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  searchbar: {
-    borderRadius: 20,
-    padding: 15,
-    width: '90%',
-    height: '100%',
-    backgroundColor: '#dcdcdc',
-  },
   description: {
     width: '90%',
+    color: '#fff',
     borderRadius: 10,
     fontSize: 16,
     marginBottom: 10,
   },
   courseItem: {
     backgroundColor: '#dcdcdc',
+    color: '#fff',
+    opacity: 0.6,
     borderRadius: 15,
     padding: 15,
     marginRight: 10,  
@@ -222,12 +219,13 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   courseTitle: {
-    
+    color: '#fff',
     fontSize: 18,
     fontWeight: '600',
     marginTop: 15,
   },
   courseFees: {
+    color: '#fff',
     fontSize: 16,
     marginBottom: 5,
   },
@@ -238,6 +236,22 @@ const styles = StyleSheet.create({
   flatListContainer: {
     paddingHorizontal: 5,  
   },
- 
+  BackBtnContainer: {
+    marginTop: 20,
+    width: '100%',
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
+  },
+  BackBtn: {
+    width: 100,
+    height: 40,
+    color: '#ffffff',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#7BD859',
+    borderRadius: 15,
+    shadowColor: '#000',
+    elevation: 3,
+  },
 
 });

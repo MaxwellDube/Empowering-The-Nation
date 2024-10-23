@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Modal, StyleSheet, ScrollView } from 'react-native';
+import { useNavigation } from "@react-navigation/native";
+import { RootStackParamList } from './RootStackParams';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 // Define the available courses
 const coursesData = [
@@ -12,12 +15,15 @@ const coursesData = [
   { id: 7, name: 'Garden Maintenance', price: 750 },
 ];
 
+type CourseDetailsScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Apply'>;
+
 const ApplyScreen = () => {
   // Define state for storing user input and calculations
   const [name, setName] = useState('');
   const [selectedCourses, setSelectedCourses] = useState<number[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [total, setTotal] = useState<number | null>(null);
+  const navigation = useNavigation<CourseDetailsScreenNavigationProp>();
 
   // Toggle course selection
   const handleCourseSelection = (courseId: number) => {
@@ -48,28 +54,25 @@ const ApplyScreen = () => {
   return (
     <ScrollView>
       <View style={styles.container}>
-        <Text style={styles.title}>Apply for Courses</Text>
-
-        <View style={styles.discounts}>
-            <Text>• One course – no discount</Text>
-            <Text>• Two courses – 5% discount</Text>
-            <Text>• Three courses – 10% discount</Text>
-            <Text>• More than three courses – 15% discount</Text>
+        <View style={styles.titleContainer}>
+          <Text style={styles.title}>Apply for Courses</Text>
+          <TouchableOpacity style={styles.BackBtn} onPress={() => navigation.navigate("Home")}>
+              <Text style={styles.text}>Back</Text>
+                
+          </TouchableOpacity>
         </View>
-
-        <View style={styles.inputContainer}>
-            <TextInput
-                placeholder="Enter Your Name"
-                value={name}
-                onChangeText={setName}
-                style={styles.input}
-            />
-
-        </View>
-
         
 
-        <Text>Select Courses:</Text>
+        <View style={styles.inputContainer}>
+          <View style={styles.discounts}>
+              <Text style={styles.text}>• One course – no discount</Text>
+              <Text style={styles.text}>• Two courses – 5% discount</Text>
+              <Text style={styles.text}>• Three courses – 10% discount</Text>
+              <Text style={styles.text}>• More than three courses – 15% discount</Text>
+          </View>
+        </View>
+
+        <Text style={styles.title} >Select Courses:</Text>
         {coursesData.map(course => (
             <TouchableOpacity
             key={course.id}
@@ -79,8 +82,8 @@ const ApplyScreen = () => {
                 selectedCourses.includes(course.id) && styles.selectedCourse,
             ]}
             >
-            <Text>{course.name}</Text>
-            <Text>Price: R{course.price}</Text>
+            <Text style={styles.text}>{course.name}</Text>
+            <Text style={styles.text}>Price: R{course.price}</Text>
             </TouchableOpacity>
         ))}
 
@@ -97,12 +100,13 @@ const ApplyScreen = () => {
         >
             <View style={styles.modalView}>
                 <Text style={styles.modalText}>Name: {name}</Text>
-                <Text>Courses Selected:</Text>
+                <Text style={styles.modalText}>Courses Selected:</Text>
                 {selectedCourses.map(id => {
                     const course = coursesData.find(c => c.id === id);
-                    return <Text key={id}>{course?.name}</Text>;
+                    return <Text style={styles.courseItem} key={id}>{course?.name}</Text>;
+                    
                 })}
-                <Text>Total Fee (with discount & VAT): R{total}</Text>
+                <Text style={styles.modalText}>Total Fee (with discount & VAT): R{total}</Text>
                 <TouchableOpacity
                     style={[styles.button, styles.buttonClose]}
                     onPress={() => setModalVisible(false)}
@@ -123,47 +127,63 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    backgroundColor: "#0d2e09",
   },
+  titleContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+
+  },
+  BackBtn: {
+    width: 100,
+    height: 40,
+    color: '#ffffff',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#D14B4D',
+    borderRadius: 15,
+    shadowColor: '#000',
+    elevation: 3,
+   },
   title: {
     fontSize: 20,
+    color: '#fff',
     fontWeight: 'bold',
-    marginBottom: 20,
+  },
+  text: {
+    color: '#fff',
   },
   discounts: {
     borderRadius: 20,
+    margin: 10,
     padding: 15,
     width: '90%',
     height: 'auto',
-    backgroundColor: '#dcdcdc'
+    backgroundColor: 'rgba(255, 255, 255, 0.5)',
   },
   inputContainer: {
     width: '100%',
-    height: 65,
     marginTop: 15,
     marginBottom: 15,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  input: {
-    borderRadius: 20,
-    padding: 15,
-    width: '90%',
-    height: '100%',
-    backgroundColor: '#dcdcdc',
-  },
+
   courseItem: {
     padding: 10,
     marginVertical: 5,
-    backgroundColor: '#f0f0f0',
+    borderRadius: 10,
+    color: '#fff',
+    backgroundColor: 'rgba(255, 255, 255, 0.5)',
   },
   selectedCourse: {
     backgroundColor: '#d0f0c0',
   },
   button: {
-    backgroundColor: 'green',
+    backgroundColor: '#7BD859',
     padding: 10,
     marginTop: 20,
-    borderRadius: 5,
+    borderRadius: 10,
     alignItems: 'center',
   },
   buttonText: {
@@ -175,7 +195,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 50,
-    backgroundColor: 'white',
+    backgroundColor: "#0d2e09",
     padding: 35,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -184,11 +204,12 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   modalText: {
+    color: '#fff',
     fontSize: 18,
     marginBottom: 16,
   },
   buttonClose: {
-    backgroundColor: 'green',
+    backgroundColor: '#7BD859',
   },
 });
 
