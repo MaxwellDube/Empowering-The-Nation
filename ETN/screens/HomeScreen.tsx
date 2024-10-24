@@ -1,23 +1,24 @@
-import React from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, ScrollView, TextInput, Image } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, ScrollView, Image, ImageBackground } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../screens/RootStackParams';
 
 export interface CourseDetails {
-    
-    title: string;
-    fees: string;
-    purpose: string;
-    content: string[];
-  }
+  title: string;
+  fees: string;
+  purpose: string;
+  content: string[];
+  backgroundImage: any;
+}
 
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
 
 export default function HomeScreen() {
   const navigation = useNavigation<HomeScreenNavigationProp>();
+  const [selectedScreen, setSelectedScreen] = useState<string | null>(null);
 
   // Data for the courses
   const sixMonthCourses: CourseDetails[] = [
@@ -31,11 +32,12 @@ export default function HomeScreen() {
         'Emergency scene management',
         'Cardio-Pulmonary Resuscitation (CPR)',
         'Respiratory distress e.g., Choking, blocked airway',
-      ]
+      ],
+      backgroundImage: require('../assets/first-aid.jpg') // Add this
     },
-    { 
-      title: 'Sewing', 
-      fees: 'R1500', 
+    {
+      title: 'Sewing',
+      fees: 'R1500',
       purpose: 'To provide alterations and new garment tailoring services',
       content: [
         'Types of stitches',
@@ -43,7 +45,8 @@ export default function HomeScreen() {
         'Sewing buttons, zips, hems and seams',
         'Alterations',
         'Designing and sewing new garments',
-      ]
+      ],
+      backgroundImage: require('../assets/Sewing.jpg') // Add this
     },
     { 
       title: 'Landscaping', 
@@ -55,7 +58,8 @@ export default function HomeScreen() {
         'Balancing of plants and trees in a garden',
         'Aesthetics of plant shapes and colours',
         'Garden layout',
-      ]
+      ],
+      backgroundImage: require('../assets/Landscaping.jpg') // Add this
     },
     { 
       title: 'Life Skills', 
@@ -66,7 +70,8 @@ export default function HomeScreen() {
         'Basic labour law (know your rights)',
         'Basic reading and writing literacy',
         'Basic numeric literacy',
-      ]
+      ],
+      backgroundImage: require('../assets/books_1.jpg') // Add this
     },
   ];
 
@@ -80,7 +85,8 @@ export default function HomeScreen() {
         'Seven-month to one year old needs',
         'Toddler needs',
         'Educational toys',
-      ]
+      ],
+      backgroundImage: require('../assets/child-minding.jpg') // Add this
     },
     { 
       title: 'Cooking', 
@@ -91,7 +97,8 @@ export default function HomeScreen() {
         'Types of protein, carbohydrates and vegetables',
         'Planning meals',
         'Preparation and cooking of meals',
-      ]
+      ],
+      backgroundImage: require('../assets/cooking.jpg') // Add this
     },
     { 
       title: 'Garden Maintenance', 
@@ -101,65 +108,79 @@ export default function HomeScreen() {
         'Water restrictions and the watering requirements of indigenous and exotic plants',
         'Pruning and propagation of plants',
         'Planting techniques for different plant types',
-      ]
+      ],
+      backgroundImage: require('../assets/gardening.jpg') // Add this
     },
   ];
+
+  const handleScreenChange = (value: string) => {
+    setSelectedScreen(value);
+    if (value) {
+      navigation.navigate(value as keyof RootStackParamList); // Type assertion here
+    }
+};
 
   const renderCourseItem = ({ item }: { item: CourseDetails }) => (
     <TouchableOpacity
       style={styles.courseItem}
       onPress={() => navigation.navigate('CourseDetails', { course: item })}
     >
-      <Text style={styles.courseTitle}>{item.title}</Text>
-      <Text style={styles.courseFees}>Fees: {item.fees}</Text>
-      <Text style={styles.courseDescription}>{item.purpose}</Text>
+      <ImageBackground source={item.backgroundImage} style={styles.imageBackground} imageStyle={{ borderRadius: 15 }}>
+        <Text style={styles.courseTitle}>{item.title}</Text>
+        <Text style={styles.courseFees}>Fees: {item.fees}</Text>
+        <Text style={styles.courseDescription}>{item.purpose}</Text>
+      </ImageBackground>
     </TouchableOpacity>
   );
 
   return (
     <ScrollView>
-        <View style={styles.container}>
-            <View style={styles.hero}>
-                <Image style={styles.image} source = {require('../assets/hero-img.jpg')} />
-            </View>
-            
-            
-            <Text style={styles.heading}>Empowering the Nation</Text>
-            
-            <Text style={styles.description}>
-                Empowering the Nation offers the following six-month courses:
-            </Text>
-            <FlatList
-                data={sixMonthCourses}
-                renderItem={renderCourseItem}
-                keyExtractor={(item) => item.title}
-                horizontal={true}  // Set the FlatList to scroll horizontally
-                showsHorizontalScrollIndicator={false}  // Hide the horizontal scroll indicator
-                contentContainerStyle={styles.flatListContainer}  // Optional: Style the FlatList container
-            />
-
-            <Text style={styles.description}>
-                Empowering the Nation also offers the following six-week short courses:
-            </Text>
-            <FlatList
-                data={sixWeekCourses}
-                renderItem={renderCourseItem}
-                keyExtractor={(item) => item.title}
-                horizontal={true}  // Set the FlatList to scroll horizontally
-                showsHorizontalScrollIndicator={false}  // Hide the horizontal scroll indicator
-                contentContainerStyle={styles.flatListContainer}  // Optional: Style the FlatList container
-            />
-            <View style={styles.BackBtnContainer}>
-              <TouchableOpacity style={styles.BackBtn} onPress={() => navigation.navigate("ContactUs")}>
-                  <Text style={{color: '#fff'}}>Contact Us</Text>
-                  
-              </TouchableOpacity>
-            </View>
-        
+      <View style={styles.container}>
+        {/* Dropdown for navigating to different screens */}
+        <Picker
+          selectedValue={selectedScreen}
+          onValueChange={(itemValue) => handleScreenChange(itemValue as string)}
+          style={styles.picker}
+        >
+          <Picker.Item label="MENU" value={null} />
+          <Picker.Item label="Home" value="Home" />
+          <Picker.Item label="Contact Us" value="ContactUs" />
+          <Picker.Item label="Apply" value="Apply" />
+        </Picker>
+        <View style={styles.hero}>
+          <Image style={styles.image} source={require('../assets/hero-img.jpg')} />
         </View>
 
+        <Text style={styles.heading}>Empowering the Nation</Text>
+        
+
+        <Text style={styles.description}>Empowering the Nation offers the following six-month courses:</Text>
+        <FlatList
+          data={sixMonthCourses}
+          renderItem={renderCourseItem}
+          keyExtractor={(item) => item.title}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.flatListContainer}
+        />
+
+        <Text style={styles.description}>Empowering the Nation also offers the following six-week short courses:</Text>
+        <FlatList
+          data={sixWeekCourses}
+          renderItem={renderCourseItem}
+          keyExtractor={(item) => item.title}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.flatListContainer}
+        />
+
+        <View style={styles.BackBtnContainer}>
+          <TouchableOpacity style={styles.BackBtn} onPress={() => navigation.navigate('ContactUs')}>
+            <Text style={{ color: '#fff' }}>Contact Us</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     </ScrollView>
-    
   );
 }
 
@@ -177,6 +198,13 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
     marginBottom: 20,
+  },
+  picker: {
+    height: 50,
+    width: '20%',
+    color: '#fff',
+    backgroundColor: '#7BD859',
+    marginVertical: 20,
   },
   hero: {
     width: '100%',
@@ -196,6 +224,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  imageBackground: {
+    flex: 1,
+    padding: 10,
+  },
   description: {
     width: '90%',
     color: '#fff',
@@ -204,18 +236,16 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   courseItem: {
-    backgroundColor: '#dcdcdc',
-    color: '#fff',
-    opacity: 0.6,
+    color: '#fff',  
     borderRadius: 15,
-    padding: 15,
     marginRight: 10,  
     shadowColor: '#d4ffd3',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 10,
-    width: 200,  
+    width: 200,
+    height: 150,  
     marginBottom: 20,
   },
   courseTitle: {

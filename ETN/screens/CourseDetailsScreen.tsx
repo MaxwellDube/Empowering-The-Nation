@@ -1,4 +1,3 @@
-// CourseDetailsScreen.tsx
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { RouteProp, useRoute } from '@react-navigation/native';
