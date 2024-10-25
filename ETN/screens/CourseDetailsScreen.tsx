@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { RouteProp, useRoute } from '@react-navigation/native';
+import { Picker } from '@react-native-picker/picker';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from '../screens/RootStackParams'
@@ -20,30 +21,45 @@ export default function CourseDetailsScreen() {
   const navigation = useNavigation<CourseDetailsScreenNavigationProp>();
   const route = useRoute<CourseDetailsScreenRouteProp>();
   const course = route.params.course;
+  const [selectedScreen, setSelectedScreen] = useState<string | null>(null);
+
+  const handleScreenChange = (value: string) => {
+    setSelectedScreen(value);
+    if (value) {
+      navigation.navigate(value as keyof RootStackParamList); // Type assertion here
+    }
+  };
 
   return (
     <ScrollView style={styles.scroll}>
       <View style={styles.container}>
+        {/* Dropdown for navigating to different screens */}
+        <Picker
+          selectedValue={selectedScreen}
+          onValueChange={(itemValue) => handleScreenChange(itemValue as string)}
+          style={styles.picker}
+        >
+          <Picker.Item label="MENU" value={null} />
+          <Picker.Item label="Home" value="Home" />
+          <Picker.Item label="Contact Us" value="ContactUs" />
+          <Picker.Item label="Apply" value="Apply" />
+        </Picker>
         <View style={styles.card}>
-          
           <Text style={styles.title}>{course.title}</Text>
           <View style={styles.BtnContainer}>
             <Text style={styles.fees}>Price:  {course.fees}</Text>
             <TouchableOpacity style={styles.ApplyBtn} onPress={() => navigation.navigate("Apply")}>
-                <Text style={styles.details}>Apply Now</Text>
-                
+                <Text style={styles.details}>Apply Now</Text> 
             </TouchableOpacity>
-          </View>    
+          </View> 
           <Text style={styles.fees}>Content:</Text>
           <Text style={styles.details}>{course.content}</Text>
         </View>
         <View style={styles.BackBtnContainer}>
             <TouchableOpacity style={styles.BackBtn} onPress={() => navigation.navigate("Home")}>
-                <Text style={styles.details}>Back</Text>
-                
+                <Text style={styles.details}>Back</Text> 
             </TouchableOpacity>
         </View>
-        
       </View>
     </ScrollView>
   );
@@ -56,11 +72,19 @@ const styles = StyleSheet.create({
     backgroundColor: "#0d2e09",
   },
   container: {
-
+    flex: 1,
+    padding: 5,
+  },
+  picker: {
+    height: 50,
+    width: '40%',
+    color: '#fff',
+    backgroundColor: '#7BD859',
+    marginVertical: 20,
   },
   card: {
-    marginTop: 60,
-    backgroundColor: 'rgba(255, 255, 255, 0.5)',
+    marginTop: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
     color: '#fff',
     padding: 10,
     borderRadius: 10,

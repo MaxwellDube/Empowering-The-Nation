@@ -118,7 +118,7 @@ export default function HomeScreen() {
     if (value) {
       navigation.navigate(value as keyof RootStackParamList); // Type assertion here
     }
-};
+  };
 
   const renderCourseItem = ({ item }: { item: CourseDetails }) => (
     <TouchableOpacity
@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
   },
   picker: {
     height: 50,
-    width: '20%',
+    width: '40%',
     color: '#fff',
     backgroundColor: '#7BD859',
     marginVertical: 20,
@@ -261,7 +261,7 @@ const styles = StyleSheet.create({
   },
   courseDescription: {
     fontSize: 14,
-    color: '#555',
+    color: '#888',
   },
   flatListContainer: {
     paddingHorizontal: 5,  

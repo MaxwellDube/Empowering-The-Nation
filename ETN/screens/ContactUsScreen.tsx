@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { Picker } from '@react-native-picker/picker';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../screens/RootStackParams' 
 
@@ -10,6 +11,7 @@ type ContactUsNavigationProp = StackNavigationProp<RootStackParamList, 'ContactU
 export default function ContactUsScreen() {
   const [name, setName] = useState('');
   const [message, setMessage] = useState('');
+  const [selectedScreen, setSelectedScreen] = useState<string | null>(null);
   const navigation = useNavigation<ContactUsNavigationProp>();
 
   const handleFormSubmit = () => {
@@ -17,40 +19,58 @@ export default function ContactUsScreen() {
     alert('Message sent successfully!');
   };
 
+  const handleScreenChange = (value: string) => {
+    setSelectedScreen(value);
+    if (value) {
+      navigation.navigate(value as keyof RootStackParamList); // Type assertion here
+    }
+  };
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.heading}>Contact Us</Text>
+    <ScrollView>
+      <View style={styles.container}>
+        {/* Dropdown for navigating to different screens */}
+        <Picker
+          selectedValue={selectedScreen}
+          onValueChange={(itemValue) => handleScreenChange(itemValue as string)}
+          style={styles.picker}
+        >
+          <Picker.Item label="MENU" value={null} />
+          <Picker.Item label="Home" value="Home" />
+          <Picker.Item label="Contact Us" value="ContactUs" />
+          <Picker.Item label="Apply" value="Apply" />
+        </Picker>
+        <Text style={styles.heading}>Contact Us</Text>
 
-      <View style={styles.card}>
-        <Text style={styles.heading}>Phone Number</Text>
-        <Text style={styles.heading}>Email Address</Text>
-        <Text style={styles.heading}>Physical Address</Text>
+        <View style={styles.card}>
+          <Text style={styles.heading}>Phone Number: 063 456 3818</Text>
+          <Text style={styles.heading}>Email Address: ETN@Gmail.com</Text>
+          <Text style={styles.heading}>Physical Address: The Quadrant, 146 Campground Rd, Newlands, Cape Town, 7708</Text>
 
+        </View>
+        <Text style={styles.label}>Name:</Text>
+        <TextInput
+          style={styles.input}
+          value={name}
+          onChangeText={setName}
+          placeholder="Enter your name"
+        />
+
+        <Text style={styles.label}>Message:</Text>
+        <TextInput
+          style={styles.input}
+          value={message}
+          onChangeText={setMessage}
+          placeholder="Enter your message"
+          multiline
+        />
+        <View style={styles.SendMsgBtnContainer}>
+          <TouchableOpacity style={styles.SendMsgBtn} onPress={() => navigation.navigate("ContactUs")}>
+              <Text style={{color: '#fff'}}>Send Message</Text>       
+          </TouchableOpacity>
+        </View>
       </View>
-      <Text style={styles.label}>Name:</Text>
-      <TextInput
-        style={styles.input}
-        value={name}
-        onChangeText={setName}
-        placeholder="Enter your name"
-      />
-
-      <Text style={styles.label}>Message:</Text>
-      <TextInput
-        style={styles.input}
-        value={message}
-        onChangeText={setMessage}
-        placeholder="Enter your message"
-        multiline
-      />
-
-      <View style={styles.SendMsgBtnContainer}>
-        <TouchableOpacity style={styles.SendMsgBtn} onPress={() => navigation.navigate("ContactUs")}>
-            <Text style={{color: '#fff'}}>Send Message</Text>
-                
-        </TouchableOpacity>
-      </View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -60,8 +80,15 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: "#0d2e09",
   },
+  picker: {
+    height: 40,
+    width: '40%',
+    color: '#fff',
+    backgroundColor: '#7BD859',
+    marginVertical: 20,
+  },
   card: {
-    marginTop: 60,
+    marginTop: 0,
     justifyContent: 'center',
     backgroundColor: 'rgba(255, 255, 255, 0.5)',
     color: '#fff',

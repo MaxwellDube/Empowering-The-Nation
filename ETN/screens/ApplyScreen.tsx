@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Modal, StyleSheet, ScrollView } from 'react-native';
 import { useNavigation } from "@react-navigation/native";
+import { Picker } from '@react-native-picker/picker';
 import { RootStackParamList } from './RootStackParams';
 import { StackNavigationProp } from '@react-navigation/stack';
 
@@ -23,6 +24,7 @@ const ApplyScreen = () => {
   const [selectedCourses, setSelectedCourses] = useState<number[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [total, setTotal] = useState<number | null>(null);
+  const [selectedScreen, setSelectedScreen] = useState<string | null>(null);
   const navigation = useNavigation<CourseDetailsScreenNavigationProp>();
 
   // Toggle course selection
@@ -51,18 +53,33 @@ const ApplyScreen = () => {
     setModalVisible(true);
   };
 
+  const handleScreenChange = (value: string) => {
+    setSelectedScreen(value);
+    if (value) {
+      navigation.navigate(value as keyof RootStackParamList); // Type assertion here
+    }
+  };
+
   return (
     <ScrollView>
       <View style={styles.container}>
+        {/* Dropdown for navigating to different screens */}
+        <Picker
+          selectedValue={selectedScreen}
+          onValueChange={(itemValue) => handleScreenChange(itemValue as string)}
+          style={styles.picker}
+        >
+          <Picker.Item label="MENU" value={null} />
+          <Picker.Item label="Home" value="Home" />
+          <Picker.Item label="Contact Us" value="ContactUs" />
+          <Picker.Item label="Apply" value="Apply" />
+        </Picker>
         <View style={styles.titleContainer}>
           <Text style={styles.title}>Apply for Courses</Text>
           <TouchableOpacity style={styles.BackBtn} onPress={() => navigation.navigate("Home")}>
-              <Text style={styles.text}>Back</Text>
-                
+              <Text style={styles.text}>Back</Text>    
           </TouchableOpacity>
         </View>
-        
-
         <View style={styles.inputContainer}>
           <View style={styles.discounts}>
               <Text style={styles.text}>• One course – no discount</Text>
@@ -134,6 +151,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between'
 
   },
+  picker: {
+    height: 50,
+    width: '40%',
+    color: '#fff',
+    backgroundColor: '#7BD859',
+    marginVertical: 20,
+  },
   BackBtn: {
     width: 100,
     height: 40,
@@ -159,7 +183,7 @@ const styles = StyleSheet.create({
     padding: 15,
     width: '90%',
     height: 'auto',
-    backgroundColor: 'rgba(255, 255, 255, 0.5)',
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
   },
   inputContainer: {
     width: '100%',
@@ -174,7 +198,7 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     borderRadius: 10,
     color: '#fff',
-    backgroundColor: 'rgba(255, 255, 255, 0.5)',
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
   },
   selectedCourse: {
     backgroundColor: '#d0f0c0',
