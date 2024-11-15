@@ -76,7 +76,7 @@ const ApplyScreen = () => {
         </Picker>
         <View style={styles.titleContainer}>
           <Text style={styles.title}>Apply for Courses</Text>
-          <TouchableOpacity style={styles.BackBtn} onPress={() => navigation.navigate("Home")}>
+          <TouchableOpacity style={styles.BackBtn} onPress={() => navigation.goBack()}>
               <Text style={styles.text}>Back</Text>    
           </TouchableOpacity>
         </View>
@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   buttonClose: {
-    backgroundColor: '#7BD859',
+    backgroundColor: '#D14B4D',
   },
 });
 

@@ -56,7 +56,7 @@ export default function CourseDetailsScreen() {
           <Text style={styles.details}>{course.content}</Text>
         </View>
         <View style={styles.BackBtnContainer}>
-            <TouchableOpacity style={styles.BackBtn} onPress={() => navigation.navigate("Home")}>
+            <TouchableOpacity style={styles.BackBtn} onPress={() => navigation.goBack()}>
                 <Text style={styles.details}>Back</Text> 
             </TouchableOpacity>
         </View>

@@ -192,7 +192,6 @@ const styles = StyleSheet.create({
     
   },
   heading: {
-    fontFamily: 'Iowan Old Style',
     marginTop: 15,
     fontSize: 24,
     color: '#fff',
@@ -215,14 +214,6 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 200,
     borderRadius: 15,
-
-  },
-  searchbarContainer: {
-    width: '100%',
-    height: 65,
-    marginTop: 15,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   imageBackground: {
     flex: 1,
@@ -230,7 +221,7 @@ const styles = StyleSheet.create({
   },
   description: {
     width: '90%',
-    color: '#fff',
+    color: '#7BD859',
     borderRadius: 10,
     fontSize: 16,
     marginBottom: 10,
@@ -261,7 +252,7 @@ const styles = StyleSheet.create({
   },
   courseDescription: {
     fontSize: 14,
-    color: '#888',
+    color: '#fff',
   },
   flatListContainer: {
     paddingHorizontal: 5,  

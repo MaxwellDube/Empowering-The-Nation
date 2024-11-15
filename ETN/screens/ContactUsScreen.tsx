@@ -40,8 +40,12 @@ export default function ContactUsScreen() {
           <Picker.Item label="Contact Us" value="ContactUs" />
           <Picker.Item label="Apply" value="Apply" />
         </Picker>
-        <Text style={styles.heading}>Contact Us</Text>
-
+        <View style={styles.titleContainer}>
+          <Text style={styles.title}>Contact Us</Text>
+          <TouchableOpacity style={styles.BackBtn} onPress={() => navigation.goBack()}>
+              <Text style={styles.text}>Back</Text>    
+          </TouchableOpacity>
+        </View>
         <View style={styles.card}>
           <Text style={styles.heading}>Phone Number: 063 456 3818</Text>
           <Text style={styles.heading}>Email Address: ETN@Gmail.com</Text>
@@ -86,6 +90,31 @@ const styles = StyleSheet.create({
     color: '#fff',
     backgroundColor: '#7BD859',
     marginVertical: 20,
+  },
+
+  titleContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    margin: 10,
+  },
+  BackBtn: {
+    width: 100,
+    height: 40,
+    color: '#ffffff',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#D14B4D',
+    borderRadius: 15,
+    shadowColor: '#000',
+    elevation: 3,
+   },
+  title: {
+    fontSize: 20,
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  text: {
+    color: '#fff',
   },
   card: {
     marginTop: 0,
